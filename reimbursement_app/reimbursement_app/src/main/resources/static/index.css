@@ -1,0 +1,19 @@
+h1 {
+  color: blue;
+}
+
+.submitReimbursementForm {
+  margin: 2rem;
+  border: black 2px solid;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+  margin: 2rem;
+  padding: 2rem;
+  border: black 2px solid;
+}
