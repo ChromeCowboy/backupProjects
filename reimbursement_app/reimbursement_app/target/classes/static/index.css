@@ -1,5 +1,6 @@
 h1 {
   color: blue;
+  text-align: center;
 }
 
 .submitReimbursementForm {
@@ -16,4 +17,20 @@ h1 {
   margin: 2rem;
   padding: 2rem;
   border: black 2px solid;
+}
+
+.card {
+  border: 2px solid rgb(196, 196, 196);
+  border-radius: 0.25rem;
+  background-color: rgb(241, 241, 241);
+  padding: 1rem;
+  margin: 1rem;
+}
+
+h4 {
+  padding: 0.25rem 0 0.25rem 1rem;
+}
+
+.cardText {
+  padding: 0.25rem 0 0.25rem 1rem;
 }

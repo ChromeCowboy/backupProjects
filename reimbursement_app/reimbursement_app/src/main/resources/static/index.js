@@ -102,6 +102,11 @@ function getLogin() {
 
 loginButton.addEventListener("click", () => {
   getLogin();
+
+  setTimeout(() => {
+    loginForm.reset();
+    welcome.innerHTML = "";
+  }, 4000);
 });
 
 // ==============================================

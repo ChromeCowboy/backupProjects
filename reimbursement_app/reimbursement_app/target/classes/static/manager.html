@@ -13,26 +13,31 @@
   </header>
   <main>
     <h2>Would you like to:</h2>
+
     <form action="">
+      <input id="goBack" type="button" value="logout">
       <input id="getAllUserReimbursement" type="button" value="See All Employee's Reimbursements">
       <input id="getAllReimbursements_Ben" type="button" value="See Ben's Reimbursements">
       <input id="getAllReimbursements_Alli" type="button" value="See Alli's Reimbursements">
       <input id="getAllReimbursements_Sam" type="button" value="See Sam's Reimbursements">
-      <input id="stats" type="button" value="See Statistics">
     </form>
     <form action="">
+      <input id="stats" type="button" value="See Statistics">
       <input id="showForm" type="button" value="Approve or Deny request">
     </form>
 
     <form id="hide" class="hide submitReimbursementForm" name="invoiceEmployeeForm"action="">
+      <div id="errorMessage"></div>
       <label for="invoiceNum">Invoice Number: </label>
       <input id="invoiceNum" type="text" name="invoiceNum">
       <label for="employeeName">Employee Name: </label>
       <input id="employeeName" type="text" name="employeeName">
       <input id="invoice-lookup" type="button" value="SUBMIT">
     </form>
+
     
     <form id="approval" class="hide submitReimbursementForm" name="approve-submissionForm" action="">
+      <div id="errorMessage2"></div>
       <label for="Status">Status:</label>
       <input id="status" type="text" name="status"/>
       <label for="Approval">Approval:</label>
@@ -45,7 +50,7 @@
     <section class="reimburseCards">
      
       <div class="card">
-        <h2>Reimbursements</h2>
+        <h4>Reimbursement</h4>
         <p class="cardText reimbursed_invoice_num">111</p>
         <p class="cardText reimbursed_employee">Bennny Boy</p>
         <p class="cardText reimbursed_past_pending">complete</p>

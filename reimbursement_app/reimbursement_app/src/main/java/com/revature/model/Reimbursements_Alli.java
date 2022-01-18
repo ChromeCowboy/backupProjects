@@ -1,6 +1,7 @@
 package com.revature.model;
 
 import java.util.Objects;
+import java.util.function.BooleanSupplier;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -138,6 +139,10 @@ public class Reimbursements_Alli {
                 ", reimbursed_reason='" + getReimbursed_reason() + "'" +
                 ", reimbursed_manager_reason='" + getReimbursed_manager_reason() + "'" +
                 "}";
+    }
+
+    public BooleanSupplier compareTo(Reimbursements_Alli reimbursements_Alli) {
+        return null;
     }
 
 }

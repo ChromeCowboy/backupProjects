@@ -13,6 +13,8 @@ let inited = false;
 
 let switcher = false;
 
+let goBack = document.getElementById("goBack");
+
 let index = 0;
 let topAmount = 0;
 let meanTotal = 0;
@@ -20,6 +22,9 @@ let meanTotal = 0;
 let findAllReimburse_Ben = "http://localhost:8000/employee/findAll/Ben";
 let findAllReimburse_Alli = "http://localhost:8000/employee/findAll/Alli";
 let findAllReimburse_Sam = "http://localhost:8000/employee/findAll/Sam";
+
+let approvalForm = document.getElementById("approval");
+let invoiceButton = document.getElementById("approve-submission");
 
 let getAllUserReimbursement = document.getElementById(
   "getAllUserReimbursement"
@@ -40,6 +45,16 @@ let getAllReimbursements_Sam = document.getElementById(
 let showFormButton = document.getElementById("showForm");
 
 let showForm = document.getElementById("hide");
+
+// ========================
+//GO BACK
+// ========================
+goBack.addEventListener("click", () => {
+  location.href = "index.html";
+});
+
+// ========================
+// ========================
 
 const getAll = async (employeeURL) => {
   const getAllReim = async (employeeURL) => {
@@ -171,14 +186,20 @@ getAllUserReimbursement.addEventListener("click", () => {
   );
 });
 getAllReimbursements_Ben.addEventListener("click", () => {
+  showForm.className = "hide";
+  approvalForm.className = "hide";
   getAll(findAllReimburse_Ben);
   display();
 });
 getAllReimbursements_Alli.addEventListener("click", () => {
+  showForm.className = "hide";
+  approvalForm.className = "hide";
   getAll(findAllReimburse_Alli);
   display();
 });
 getAllReimbursements_Sam.addEventListener("click", () => {
+  showForm.className = "hide";
+  approvalForm.className = "hide";
   getAll(findAllReimburse_Sam);
   display();
 });
@@ -321,28 +342,10 @@ function checkStats() {
   }
 }
 
-// let count = [];
-// function amountReimbursePerEmployee() {
-//   let name = expenseName;
-//   console.log(name);
-
-//   let employeeOne = 0;
-//   let employeeTwo = 0;
-//   let employeeThree = 0;
-
-//   // counts the dublicate names, inserts into count array.
-//   name.forEach((i) => {
-//     count[i] = (count[i] || 0) + 1;
-//   });
-//   count = count;
-// }
-
 function grabTopSpender() {
   let amounts = topExpense;
   let completed = completeExpense;
   let name = expenseName;
-
-  console.log(amounts.length);
 
   this.index = amounts.indexOf(Math.max(...amounts));
   if (completeExpense[this.index] == "pending") {
@@ -386,7 +389,8 @@ function grabMeanSpent(topExpense) {
 
 stats.addEventListener("click", () => {
   statistics(findAllReimburse_Ben, findAllReimburse_Alli, findAllReimburse_Sam);
-
+  showForm.className = "hide";
+  approvalForm.className = "hide";
   checkStats();
 });
 
@@ -396,9 +400,7 @@ stats.addEventListener("click", () => {
 // GET Reimbursement by ID, and Update
 
 // ==============================================
-// ==============================================
-let approvalForm = document.getElementById("approval");
-let invoiceButton = document.getElementById("approve-submission");
+// =============================================
 
 function showForms() {
   showForm.className = "show";
@@ -410,6 +412,10 @@ function showApprovalForm() {
 showFormButton.addEventListener("click", () => {
   showForms();
 });
+
+let errorMessage = document.getElementById("errorMessage");
+let errorMessage2 = document.getElementById("errorMessage2");
+let updateRecordForm = document.getElementsByName("approve-submissionForm")[0];
 
 // function grabs JSON variables
 let initCard = false;
@@ -425,8 +431,16 @@ let managerReason = "";
 const grabsVariables = async (id_url) => {
   const getReimbursementById = async (id_url) => {
     let response_body = await fetch(id_url);
+    if (response_body.status == 404) {
+      approvalForm.className = "hide";
+      showForm.className = "show";
+      // updateRecordForm.reset();
+      invoiceEmployeeForm.reset();
+      return (this.errorMessage.innerHTML =
+        "Please try again. Please try again.");
+    }
     let idData = await response_body.json();
-
+    this.errorMessage.innerHTML = "";
     return idData;
   };
 
@@ -470,6 +484,11 @@ function displayTheCard() {
 // ===============================================
 // Update Reimbursement's approval
 
+function handleErrors(response) {
+  if (!response.ok) throw new Error(response.status);
+  return response;
+}
+
 async function postData(submissionURL, employee_Submission) {
   const response = await fetch(submissionURL, {
     method: "POST",
@@ -480,10 +499,13 @@ async function postData(submissionURL, employee_Submission) {
     },
     body: JSON.stringify(employee_Submission),
   })
+    .then(handleErrors)
     .then((response) => {
       return response.json();
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      return console.log(err);
+    });
 }
 
 let invoiceLookup = document.getElementById("invoice-lookup");
@@ -504,7 +526,6 @@ invoiceLookup.addEventListener("click", () => {
   showApprovalForm();
 });
 
-let updateRecordForm = document.getElementsByName("approve-submissionForm")[0];
 let updateRecordButton = document.getElementById("approve-submission");
 let invoiceEmployeeForm = document.getElementsByName("invoiceEmployeeForm")[0];
 
@@ -528,7 +549,6 @@ updateRecordButton.addEventListener("click", () => {
   };
 
   let noSpaceName = this.employee.replace(/\s/g, "%20");
-
   let approvalURL = "http://localhost:8000/manager/" + noSpaceName + "Approval";
 
   postData(approvalURL, updateReimbursement);

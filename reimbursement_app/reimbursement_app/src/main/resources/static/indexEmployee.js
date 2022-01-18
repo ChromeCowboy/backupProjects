@@ -15,6 +15,16 @@ let showFormButton = document.getElementById("showForm");
 
 let showForm = document.getElementById("hide");
 
+// ========================
+//GO BACK
+// ========================
+goBack.addEventListener("click", () => {
+  location.href = "index.html";
+});
+
+// ========================
+// ========================
+
 const getAll = async (employeeURL) => {
   const getAllReim = async (employeeURL) => {
     let response_body = await fetch(employeeURL);
@@ -64,6 +74,9 @@ getAllReimbursements.addEventListener("click", () => {
 // ==================================================
 let submissionButton = document.getElementById("reimbursement-submission");
 let submitReimbursementForm = document.getElementsByName("submissionForm")[0];
+let errorMessage = document.getElementById("errorMessage");
+
+let invalidInput = "";
 
 function showForms() {
   showForm.className = "show";
@@ -76,6 +89,11 @@ showFormButton.addEventListener("click", () => {
 let submissionURL =
   "http://localhost:8000/employee/" + document.title + "_submit";
 
+function handleErrors(response) {
+  if (!response.ok) throw new Error(response.status);
+  return response;
+}
+
 async function postData(submissionURL, employee_Submission) {
   const response = await fetch(submissionURL, {
     method: "POST",
@@ -86,10 +104,14 @@ async function postData(submissionURL, employee_Submission) {
     },
     body: JSON.stringify(employee_Submission),
   })
+    .then(handleErrors)
     .then((response) => {
       return response.json();
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      this.errorMessage.innerHTML = "Not a valid input. Please try again.";
+      return console.log(err);
+    });
 }
 
 submissionButton.addEventListener("click", () => {
